@@ -52,15 +52,38 @@ def display_table():
     cursor.execute("SELECT * FROM food")
     print("{:>10}  {:>10}".format("Product", "Quantity"))
     for record in cursor.fetchall():
-        print(f"{record[0]:>10}  {record[1]:>10}    ${record[2]:>10}")
+        print(f"{record[0]:>10}  {record[1]:>10}")
 
 
 def add_item():
     """
     Adds an item to the database. User will be prompt for
     product's name and the quantity.
+    Parameters: None
+    Return: None
     """
-    pass
+
+    # Prompting for the product, and making sure it's correct data.
+    product = input("Enter name of the product: ")
+    while not product.isalpha():
+        print("Please enter a valid product.")
+        product = input("Enter name of the product: ")
+    assert product.isalpha(), "The product is not a string"
+
+    # Prompting for the quantity, and making sure it's correct data.
+    quantity = input("Enter amount you currently have: ")
+    while int(quantity) < 1:
+        print("Please enter a valid quantity.",
+              "Remember that you are adding something you already have.")
+        quantity = input("Enter amount you currently have: ")
+    quantity = int(quantity) # We transform now because we know it's a number.
+    assert type(quantity) == int, "There was a problem converting to int"
+    assert quantity > 0, "An incorrect value almost slipped through!"
+
+    # Adding correct data into the database.
+    values = (product, quantity)
+    cursor.execute("INSERT INTO food VALUES(?, ?)", values)
+    connection.commit()
 
 
 def remove_item():
