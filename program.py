@@ -49,10 +49,12 @@ def display_table():
     """
     Displays the SQL database on the terminal.
     """
+    print() # Blank space before the table.
     cursor.execute("SELECT * FROM food")
     print("{:>10}  {:>10}".format("Product", "Quantity"))
     for record in cursor.fetchall():
         print(f"{record[0]:>10}  {record[1]:>10}")
+    print() # Blank space after the table.
 
 
 def add_item():
@@ -101,12 +103,19 @@ def remove_item():
         print("Please enter a string")
         item = input("Enter the product you wish you delete: ")
     
+    # The function check_substring() goes here. The value returned
+    # is what the cursor would execute.
+
     # Selecting the desired item from the database.
     value = (item,)
     cursor.execute("SELECT product FROM FOOD WHERE product=?", value)
     products = cursor.fetchall()
 
-    # TODO: Add a way to check if the cursor is returning a value.
+    # Checking if the cursor returned a value.
+    # If not, we return the function.
+    if products == []:
+        print("Couldn't find", item, "in the database.")
+        return
 
     # Displaying all the returned values.
     for i in range(len(products)):
@@ -115,22 +124,41 @@ def remove_item():
 
     # User selection and checking that it is correct.
     choice = input("Select the desired product: ")
-    while 0 < int(choice):
+    while int(choice) < 0:
         print("Please enter a valid option.")
         choice = input("Select the desired product: ")
     choice = int(choice)
-    assert choice > 0
+    assert choice > 0, "This is not a valid option."
 
     # Selecting the product and deleting it.
     value = products[choice - 1]
     cursor.execute("DELETE FROM food WHERE product=?", value)
+    connection.commit()
 
 
 def update_quantity():
     """
     Changes the quantity of an already existing item on the database.
     """
-    pass
+    
+    # Prompting and checking for the item.
+    item = input("Enter the product you wish you delete: ")
+    while not item.isalpha():
+        print("Please enter a string")
+        item = input("Enter the product you wish you delete: ")
+    
+    # Prompting and verifying the quantity is valid.
+    quantity = input("New quantity: ")
+    while int(quantity) < 0:
+        print("Please enter a positive integer.")
+        quantity = input("New quantity: ")
+    quantity = int(quantity)
+    assert quantity >= 0, "An invalid number almost slipped through!"
+
+    # Updating the quantity on the given item.
+    values = (quantity, item)
+    cursor.execute("UPDATE food SET quantity=? WHERE product=?", values)
+    connection.commit()
 
 
 def create_shopping_list():
