@@ -94,7 +94,36 @@ def remove_item():
     desired.
     After the selection is done, the item will be deleted.
     """
-    pass
+
+    # Prompting and checking for the item to be deleted.
+    item = input("Enter the product you wish you delete: ")
+    while not item.isalpha():
+        print("Please enter a string")
+        item = input("Enter the product you wish you delete: ")
+    
+    # Selecting the desired item from the database.
+    value = (item,)
+    cursor.execute("SELECT product FROM FOOD WHERE product=?", value)
+    products = cursor.fetchall()
+
+    # TODO: Add a way to check if the cursor is returning a value.
+
+    # Displaying all the returned values.
+    for i in range(len(products)):
+        print(f"{i + 1}. {products[i]}")
+    print()
+
+    # User selection and checking that it is correct.
+    choice = input("Select the desired product: ")
+    while 0 < int(choice):
+        print("Please enter a valid option.")
+        choice = input("Select the desired product: ")
+    choice = int(choice)
+    assert choice > 0
+
+    # Selecting the product and deleting it.
+    value = products[choice - 1]
+    cursor.execute("DELETE FROM food WHERE product=?", value)
 
 
 def update_quantity():
