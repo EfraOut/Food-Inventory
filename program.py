@@ -35,6 +35,8 @@ def main():
 def display_menu():
     """
     Displays the program's menu on the terminal.
+    Parameter: None
+    Return: None
     """
     print("1. Display table")
     print("2. Add item")
@@ -42,12 +44,14 @@ def display_menu():
     print("4. Update quantity")
     print("5. Create shopping list")
     print("6. Exit")
-    print()
+    print() # Empty space after the menu.
 
 
 def display_table():
     """
     Displays the SQL database on the terminal.
+    Parameter: None
+    Return: None
     """
     print() # Blank space before the table.
     cursor.execute("SELECT * FROM food")
@@ -65,14 +69,9 @@ def add_item():
     Return: None
     """
 
-    # Prompting for the product, and making sure it's correct data.
+    # Prompting for the product and quantity,
+    # and making sure quantity is correct data.
     product = input("Enter name of the product: ")
-    while not product.isalpha():
-        print("Please enter a valid product.")
-        product = input("Enter name of the product: ")
-    assert product.isalpha(), "The product is not a string"
-
-    # Prompting for the quantity, and making sure it's correct data.
     quantity = input("Enter amount you currently have: ")
     while int(quantity) < 1:
         print("Please enter a valid quantity.",
@@ -95,6 +94,8 @@ def remove_item():
     be displayed on the screen, and then user will specify which one is
     desired.
     After the selection is done, the item will be deleted.
+    Parameters: None
+    Return: None
     """
 
     # Prompting and checking for the item to be deleted.
@@ -139,15 +140,12 @@ def remove_item():
 def update_quantity():
     """
     Changes the quantity of an already existing item on the database.
+    Parameters: None
+    Return: None
     """
     
-    # Prompting and checking for the item.
-    item = input("Enter the product you wish you delete: ")
-    while not item.isalpha():
-        print("Please enter a string")
-        item = input("Enter the product you wish you delete: ")
-    
     # Prompting and verifying the quantity is valid.
+    item = input("Enter the product you wish you delete: ")
     quantity = input("New quantity: ")
     while int(quantity) < 0:
         print("Please enter a positive integer.")
@@ -163,7 +161,10 @@ def update_quantity():
 
 def create_shopping_list():
     """
-    Creates a .xlsx with the items on the database where quantity=0.
+    Creates a new database using the items
+    on the food database where quantity=0.
+    Parameters: None
+    Return: None
     """
     pass
 
