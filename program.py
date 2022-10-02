@@ -145,7 +145,7 @@ def update_quantity():
     """
     
     # Prompting and verifying the quantity is valid.
-    item = input("Enter the product you wish you delete: ")
+    item = input("Enter the product: ")
     quantity = input("New quantity: ")
     while int(quantity) < 0:
         print("Please enter a positive integer.")
